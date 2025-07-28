@@ -1,3 +1,8 @@
+<?php
+include "../../app/helpers/csrf.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +16,7 @@
         <input type="email" name="email" id="email">
         <label>Senha</label>
         <input type="text" name="senha" id="senha">
+        <?php echo getTolkenCsrf() ?>
         <input type="submit" name="login" value="logar">
     </form>
     <script src="../../js/login.js"></script>

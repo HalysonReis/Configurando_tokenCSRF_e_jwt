@@ -14,7 +14,8 @@
         },
         "classmap": [
             "app/models",
-            "app/controler"
+            "app/controler",
+            "app/suport"
         ]
     },
     "require": {
