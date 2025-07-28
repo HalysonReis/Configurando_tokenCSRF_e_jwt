@@ -1,0 +1,24 @@
+{
+    "name": "halysonreis/configurando_token-csrf_e_jwt",
+    "description": "Como configurar o token CSRF e fazer login autentiificado com JWT",
+    "type": "project",
+    "authors": [
+        {
+            "name": "halysonreis",
+            "email": "halysondasilvadosreis@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        },
+        "classmap": [
+            "app/models",
+            "app/controler"
+        ]
+    },
+    "require": {
+        "firebase/php-jwt": "^6.11",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
