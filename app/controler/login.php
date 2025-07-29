@@ -11,6 +11,9 @@ use PDO;
 use app\models\Database;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+if(isset($_SESSION)){
+    session_destroy();
+}
 
 class Login {
     public function logar($email, $senha){
@@ -47,10 +50,10 @@ class Login {
         $_SESSION["tolkenLogin"] = $jwt;
     }
 
-    public function decodejwt(){
-        $tolkien = isset($_COOKIE['tokenLogin']) ? $_COOKIE['tokenLogin'] : false;
+    public static function decodejwt(){
+        $tolkien = isset($_SESSION['tokenLogin']) ? $_SESSION['tokenLogin'] : false;
         if($tolkien){
-            $jwt = JWT::decode($_COOKIE['tokenLogin'], new Key($_ENV['PASS_SECRET_MOST_SECRET'], 'HS256'));
+            $jwt = JWT::decode($_SESSION['tokenLogin'], new Key($_ENV['PASS_SECRET_MOST_SECRET'], 'HS256'));
             return $jwt;
         }else {
             return 'invalid';
