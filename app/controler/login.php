@@ -8,9 +8,13 @@ namespace app\controler;
 require '../vendor/autoload.php';
 
 use PDO;
+use Dotenv;
 use app\models\Database;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, "../../.env");
+$dotenv->load();
 
 class Login {
     public function logar($email, $senha){
@@ -39,7 +43,8 @@ class Login {
                     }else{
                         return [
                             'sucess' => TRUE,
-                            'acesso' => $user['nivel_acesso']
+                            'acesso' => $user['nivel_acesso'],
+                            $createJWT
                         ];
                     }
                 }else{
@@ -75,7 +80,7 @@ class Login {
             }
     
             $_SESSION["tolkenLogin"] = $jwt;
-            return TRUE;
+            return $_SESSION["tolkenLogin"];
         } catch (\Throwable $th) {
             return FALSE;
         }
@@ -83,14 +88,17 @@ class Login {
 
     public static function decodejwt(){
         try {
-            if(!isset($_SESSION['tokenLogin'])){
+            if(!isset($_SESSION)){
+                session_start();
+            }
+            if(!isset($_SESSION['tolkenLogin'])){
                 return [
                     'sucess' => FALSE,
-                    'msg' => 'Usuário não logado'
+                    'msg' => 'Usuário não logado',
                 ];
             }
             else {
-                $jwt = JWT::decode($_SESSION['tokenLogin'], new Key($_ENV['PASS_SECRET_MOST_SECRET'], 'HS256'));
+                $jwt = JWT::decode($_SESSION['tolkenLogin'], new Key($_ENV['PASS_SECRET_MOST_SECRET'], 'HS256'));
                 return [
                     'sucess' => TRUE,
                     'jwt' => $jwt
@@ -105,9 +113,13 @@ class Login {
     }
 
     public static function validaLogin($acesso){
-        $dadosJwt = $this->decodejwt();
-        if($acesso == $dadosJwt['acesso']){
-            return TRUE;
+        $dadosJwt = self::decodejwt();
+        if($dadosJwt['sucess']){
+            if($acesso == $dadosJwt['jwt']->acesso){
+                return TRUE;
+            }else {
+                return FALSE;
+            }
         }else {
             return FALSE;
         }
